@@ -15,9 +15,7 @@ public class DatabaseHandler {
     private static final String PASSWORD = "cpktnwt";
 
     public List<String> fetchData(String date) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+
         List<String> data = new ArrayList<>();
 
         try {
@@ -25,13 +23,13 @@ public class DatabaseHandler {
             Class.forName(JDBC_DRIVER);
 
            
-            conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+            Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
 
             String sql = "SELECT name, route, datte, time, seat1, seat2 FROM train WHERE datte= ?";
-            stmt = conn.prepareStatement(sql);
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, date);
 
-            rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 String name = rs.getString("name");
