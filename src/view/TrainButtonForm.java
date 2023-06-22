@@ -10,10 +10,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author USER
- */
+
 public class TrainButtonForm extends javax.swing.JFrame {
 
     /**
@@ -1025,6 +1022,36 @@ public class TrainButtonForm extends javax.swing.JFrame {
                 Time1.setText(fetchedData.get(2));
                 sit = fetchedData.get(3) +"/"+ fetchedData.get(4);
                 Seat1.setText(sit);
+                
+                Name2.setText(fetchedData.get(5));
+                Route2.setText(fetchedData.get(6));
+                Time2.setText(fetchedData.get(7));
+                sit = fetchedData.get(8) +"/"+ fetchedData.get(9);
+                Seat2.setText(sit);
+                
+                Name3.setText(fetchedData.get(10));
+                Route3.setText(fetchedData.get(11));
+                Time3.setText(fetchedData.get(12));
+                sit = fetchedData.get(13) +"/"+ fetchedData.get(14);
+                Seat3.setText(sit);
+                
+                Name4.setText(fetchedData.get(5));
+                Route4.setText(fetchedData.get(16));
+                Time4.setText(fetchedData.get(17));
+                sit = fetchedData.get(18) +"/"+ fetchedData.get(19);
+                Seat4.setText(sit);
+                
+                Name5.setText(fetchedData.get(20));
+                Route5.setText(fetchedData.get(21));
+                Time5.setText(fetchedData.get(22));
+                sit = fetchedData.get(23) +"/"+ fetchedData.get(24);
+                Seat5.setText(sit);
+                
+                Name6.setText(fetchedData.get(25));
+                Route6.setText(fetchedData.get(26));
+                Time6.setText(fetchedData.get(27));
+                sit = fetchedData.get(28) +"/"+ fetchedData.get(29);
+                Seat6.setText(sit);
                 
                 
                 
