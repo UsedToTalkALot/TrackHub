@@ -5,29 +5,20 @@
 package controller;
 
 
+import view.TicketButtonForm;
 import DAO.DAO_PROJECT;
-import java.sql.ResultSet;
+
 
 import model.*;
 import view.*;
-import java.sql.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import javax.swing.JOptionPane;
 
 
 public class ControllerProj {
     
     TicketModelClass myModel;
     TicketButtonForm myView;
-    ResultSet rs;
-    PreparedStatement pst;
-    Connection conn;
-    PreparedStatement stmt;
-    Statement stm=null;
+   
     DAO_PROJECT daoReg=new DAO_PROJECT();
     
     public ControllerProj(TicketButtonForm myView){

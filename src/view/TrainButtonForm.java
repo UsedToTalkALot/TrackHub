@@ -227,8 +227,8 @@ public class TrainButtonForm extends javax.swing.JFrame {
 
     private void btnTicketsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTicketsMouseEntered
         // TODO add your handling code here:
-         Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
-        btnTickets.setCursor(cursor);
+//         Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+//        btnTickets.setCursor(cursor);
    
     }//GEN-LAST:event_btnTicketsMouseEntered
 

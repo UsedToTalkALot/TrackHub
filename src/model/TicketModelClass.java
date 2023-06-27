@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.Date;
+
 /**
  *
  * @author USER
@@ -18,13 +20,19 @@ public class TicketModelClass {
     
     int arrivalTime;
     int departureTime;
-    int passengerId;
-   String passengerName;
+   
    int phoneNumber; // primary key
-    int seatNumber;
-    String sourceDestination;
+    String seatNumber;
+    String source;
+            String Destination;
+            String train;
+             Date datee;
     int ticketPrice;
-    int trainNumber;
+    int jbutton1;
+ int jbutton2;
+  int jbutton3;
+   int jbutton4;
+    int jbutton5;
 
     public int getArrivalTime() {
         return arrivalTime;
@@ -42,22 +50,6 @@ public class TicketModelClass {
         this.departureTime = departureTime;
     }
 
-    public int getPassengerId() {
-        return passengerId;
-    }
-
-    public void setPassengerId(int passengerId) {
-        this.passengerId = passengerId;
-    }
-
-    public String getPassengerName() {
-        return passengerName;
-    }
-
-    public void setPassengerName(String passengerName) {
-        this.passengerName = passengerName;
-    }
-
     public int getPhoneNumber() {
         return phoneNumber;
     }
@@ -66,20 +58,44 @@ public class TicketModelClass {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getSeatNumber() {
+    public String getSeatNumber() {
         return seatNumber;
     }
 
-    public void setSeatNumber(int seatNumber) {
+    public void setSeatNumber(String seatNumber) {
         this.seatNumber = seatNumber;
     }
 
-    public String getSourceDestination() {
-        return sourceDestination;
+    public String getSource() {
+        return source;
     }
 
-    public void setSourceDestination(String sourceDestination) {
-        this.sourceDestination = sourceDestination;
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getDestination() {
+        return Destination;
+    }
+
+    public void setDestination(String Destination) {
+        this.Destination = Destination;
+    }
+
+    public String getTrain() {
+        return train;
+    }
+
+    public void setTrain(String train) {
+        this.train = train;
+    }
+
+    public Date getDatee() {
+        return datee;
+    }
+
+    public void setDatee(Date datee) {
+        this.datee = datee;
     }
 
     public int getTicketPrice() {
@@ -90,33 +106,65 @@ public class TicketModelClass {
         this.ticketPrice = ticketPrice;
     }
 
-    public int getTrainNumber() {
-        return trainNumber;
+    public int getJbutton1() {
+        return jbutton1;
     }
 
-    public void setTrainNumber(int trainNumber) {
-        this.trainNumber = trainNumber;
+    public void setJbutton1(int jbutton1) {
+        this.jbutton1 = jbutton1;
     }
 
-    public TicketModelClass(int arrivalTime,
-    int departureTime,
-    int passengerId,
-   String passengerName,
-   int phoneNumber, // primary key
-    int seatNumber,
-    String sourceDestination,
-    int ticketPrice,
-    int trainNumber){
+    public int getJbutton2() {
+        return jbutton2;
+    }
+
+    public void setJbutton2(int jbutton2) {
+        this.jbutton2 = jbutton2;
+    }
+
+    public int getJbutton3() {
+        return jbutton3;
+    }
+
+    public void setJbutton3(int jbutton3) {
+        this.jbutton3 = jbutton3;
+    }
+
+    public int getJbutton4() {
+        return jbutton4;
+    }
+
+    public void setJbutton4(int jbutton4) {
+        this.jbutton4 = jbutton4;
+    }
+
+    public int getJbutton5() {
+        return jbutton5;
+    }
+
+    public void setJbutton5(int jbutton5) {
+        this.jbutton5 = jbutton5;
+    }
+    
+   
+    public TicketModelClass(int arrivalTime, int departureTime, int phoneNumber, String seatNumber, String source, String Destination, String train, Date datee,int ticketprice,int jbutton1,int jbutton2,int jbutton3,int jbutton4,int jbutton5){
         this.arrivalTime=arrivalTime;
         this.departureTime=departureTime;
-        this.passengerId=passengerId;
-        this.passengerName=passengerName;
+       
         this.phoneNumber=phoneNumber;
         this.seatNumber=seatNumber;
-        this.sourceDestination=sourceDestination;
-        this.ticketPrice=ticketPrice;
-        this.trainNumber=trainNumber;
-              
+        this.source=source;
+        this.Destination=Destination;
+        
+        this.train=train;
+        this.datee=datee;
+        this.ticketPrice=ticketprice;
+        this.jbutton1=jbutton1;
+         this.jbutton2=jbutton2;
+          this.jbutton3=jbutton3;
+           this.jbutton4=jbutton4;
+           this.jbutton5=jbutton5;
+           
     }
 }
 
