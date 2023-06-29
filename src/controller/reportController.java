@@ -25,10 +25,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.sql.Date;
+import java.time.LocalDate;
 
 
 
 public class reportController {
+    
+    
     public void saveAsExcel(DefaultTableModel model) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Save as Excel");
@@ -179,11 +183,13 @@ public class reportController {
         List<reportModel> reportList = new ArrayList<>();
         
         try {
+           LocalDate currentDate = LocalDate.now();
+            Date today = Date.valueOf(currentDate);
             
-            //System.out.println("k xa khabar ");
-            String query = "SELECT * FROM TRANSACTION";
-             pst = conn.prepareStatement(query);
-             rs = pst.executeQuery();
+            String query = "SELECT * FROM TRANSACTION WHERE DATE = ?";
+            pst = conn.prepareStatement(query);
+            pst.setDate(1, today);
+            rs = pst.executeQuery();
             
             while (rs.next()) {
                 String date = rs.getString("DATE");
@@ -193,12 +199,12 @@ public class reportController {
                 String price = rs.getString("PRICE");
                 
                 
-            System.out.println("Date: " + date);
-            System.out.println("Passenger Number: " + passengerNo);
-            System.out.println("No. of Tickets: " + noOfTickets);
-            System.out.println("Class: " + seatClass);
-            System.out.println("Price: " + price);
-            System.out.println("-----------------------------------");
+//            System.out.println("Date: " + date);
+//            System.out.println("Passenger Number: " + passengerNo);
+//            System.out.println("No. of Tickets: " + noOfTickets);
+//            System.out.println("Class: " + seatClass);
+//            System.out.println("Price: " + price);
+//            System.out.println("-----------------------------------");
                 
                 
                 reportModel report = new reportModel(date, passengerNo, noOfTickets, seatClass, price);
