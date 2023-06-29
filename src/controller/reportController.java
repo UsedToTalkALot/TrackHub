@@ -15,9 +15,6 @@ import view.report;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -26,43 +23,61 @@ import java.io.FileOutputStream;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 
 public class reportController {
-//     public void saveAsPDF(DefaultTableModel model, String filePath) {
-//        try {
-//        // Create a new document
-//        Document document = new Document();
-//        PdfWriter.getInstance(document, new FileOutputStream(filePath));
-//        document.open();
-//
-//        // Create a PDF table
-//        PdfPTable pdfTable = new PdfPTable(model.getColumnCount());
-//
-//        // Add table headers
-//        for (int column = 0; column < model.getColumnCount(); column++) {
-//            PdfPCell cell = new PdfPCell(new Phrase(model.getColumnName(column)));
-//            pdfTable.addCell(cell);
-//        }
-//
-//        // Add table rows
-//        for (int row = 0; row < model.getRowCount(); row++) {
-//            for (int column = 0; column < model.getColumnCount(); column++) {
-//                PdfPCell cell = new PdfPCell(new Phrase(model.getValueAt(row, column).toString()));
-//                pdfTable.addCell(cell);
-//            }
-//        }
-//
-//        // Add the table to the document
-//        document.add(pdfTable);
-//        document.close();
-//
-//        System.out.println("PDF file saved successfully.");
-//    } catch (Exception e) {
-//        e.printStackTrace();
-//    }
-//}
+    public void saveAsExcel(DefaultTableModel model) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save as Excel");
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Excel Files", "xlsx"));
+
+        int userSelection = fileChooser.showSaveDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            String filePath = fileChooser.getSelectedFile().getAbsolutePath() + ".xlsx";
+
+            try {
+                Workbook workbook = new XSSFWorkbook();
+                Sheet sheet = workbook.createSheet("Report");
+
+                // Create header row
+                Row headerRow = sheet.createRow(0);
+                for (int column = 0; column < model.getColumnCount(); column++) {
+                    Cell cell = headerRow.createCell(column);
+                    cell.setCellValue(model.getColumnName(column));
+                }
+
+                // Create data rows
+                for (int row = 0; row < model.getRowCount(); row++) {
+                    Row dataRow = sheet.createRow(row + 1);
+                    for (int column = 0; column < model.getColumnCount(); column++) {
+                        Cell cell = dataRow.createCell(column);
+                        cell.setCellValue(model.getValueAt(row, column).toString());
+                    }
+                }
+
+                // Auto-size columns
+                for (int column = 0; column < model.getColumnCount(); column++) {
+                    sheet.autoSizeColumn(column);
+                }
+
+                // Write the workbook to a file
+                FileOutputStream fileOut = new FileOutputStream(filePath);
+                workbook.write(fileOut);
+                fileOut.close();
+
+                System.out.println("Excel file saved successfully.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+   
+
+    
+
     
     public void saveAsPDF(DefaultTableModel model) {
     try {
