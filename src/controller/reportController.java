@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controller;
 
 
@@ -144,13 +140,12 @@ public class reportController {
    
 
        
-        public void populateTable(DefaultTableModel model) {
-         try {
-      reportController controller = new reportController();
-        List<reportModel> reportList = getReportData();
+        public void populateTable(DefaultTableModel model, String selectedButton) {
+    try {
+        reportController controller = new reportController();
+        List<reportModel> reportList = controller.getReportData(selectedButton);
 
         // Clear existing table data
-//        model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
 
         // Populate table with fetched data
@@ -164,10 +159,14 @@ public class reportController {
             };
             model.addRow(row);
         }
+        
+        // Notify the view to update the table
+        view.updateTable();
     } catch (Exception e) {
-        // Print the exception details for debugging
+        e.printStackTrace();
+        // Handle the exception accordingly
     }
-    }
+}
     
     private Connection conn;
      
@@ -179,49 +178,68 @@ public class reportController {
     
     report view;
     
-     public List<reportModel> getReportData() {
-        List<reportModel> reportList = new ArrayList<>();
-        
-        try {
-           LocalDate currentDate = LocalDate.now();
-            Date today = Date.valueOf(currentDate);
-            
-            String query = "SELECT * FROM TRANSACTION WHERE DATE = ?";
-            pst = conn.prepareStatement(query);
-            pst.setDate(1, today);
-            rs = pst.executeQuery();
-            
-            while (rs.next()) {
-                String date = rs.getString("DATE");
-                String passengerNo = rs.getString("PASSENGER_NO");
-                String noOfTickets = rs.getString("NO_OF_TICKETS");
-                String seatClass = rs.getString("CLASS");
-                String price = rs.getString("PRICE");
-                
-                
-//            System.out.println("Date: " + date);
-//            System.out.println("Passenger Number: " + passengerNo);
-//            System.out.println("No. of Tickets: " + noOfTickets);
-//            System.out.println("Class: " + seatClass);
-//            System.out.println("Price: " + price);
-//            System.out.println("-----------------------------------");
-                
-                
-                reportModel report = new reportModel(date, passengerNo, noOfTickets, seatClass, price);
-               // reportModel report = new reportModel();
-                //reportModel report = new reportModel(date, passengerNo, noOfTickets,seatClass, price);
-                reportList.add(report);
-            }
-            
-           conn.close();
-        } catch (SQLException e) {
+     public List<reportModel> getReportData(String selectedButton) {
+    List<reportModel> reportList = new ArrayList<>();
+    
+    try {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate startDate = null;
+        LocalDate endDate = currentDate;
+
+        switch (selectedButton) {
+            case "today":
+                startDate = currentDate;
+                break;
+            case "thisweek":
+                startDate = currentDate.minusDays(currentDate.getDayOfWeek().getValue() - 1);
+                break;
+            case "thismonth":
+                startDate = currentDate.withDayOfMonth(1);
+                break;
+            case "thisyear":
+                startDate = currentDate.withDayOfYear(1);
+                break;
+            default:
+                // Handle invalid button value
+                break;
         }
+
+        Date sqlStartDate = Date.valueOf(startDate);
+        Date sqlEndDate = Date.valueOf(endDate);
         
+        String query = "SELECT * FROM TRANSACTION WHERE DATE BETWEEN ? AND ?";
+        pst = conn.prepareStatement(query);
+        pst.setDate(1, sqlStartDate);
+        pst.setDate(2, sqlEndDate);
+        rs = pst.executeQuery();
         
-        return reportList;
-        
+        while (rs.next()) {
+            String date = rs.getString("DATE");
+            String passengerNo = rs.getString("PASSENGER_NO");
+            String noOfTickets = rs.getString("NO_OF_TICKETS");
+            String seatClass = rs.getString("CLASS");
+            String price = rs.getString("PRICE");
+
+            System.out.println("Date: " + date);
+            System.out.println("Passenger Number: " + passengerNo);
+            System.out.println("No. of Tickets: " + noOfTickets);
+            System.out.println("Class: " + seatClass);
+            System.out.println("Price: " + price);
+            System.out.println("-----------------------------------");
+
+            reportModel report = new reportModel(date, passengerNo, noOfTickets, seatClass, price);
+            reportList.add(report);
+        }
+
+        conn.close();
+    } catch (SQLException e) {
+        // Handle the exception accordingly
         
     }
+
+    return reportList;
+}
+
     
 
     
