@@ -22,6 +22,9 @@ public class reportModel {
         
      }
 
+    public reportModel(String toString, String passengerNumber, int numberOfTickets, String seatClass, double price) {
+    }
+
     public String getDate() {
         return date;
     }
