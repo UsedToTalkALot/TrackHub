@@ -27,6 +27,18 @@ import java.time.LocalDate;
 
 
 public class reportController {
+      private static Connection conn;
+     
+     public reportController(){
+         conn= MyConnection.dbConnect();
+     }
+    PreparedStatement pst;
+    ResultSet rs;
+    
+    report view;
+    
+   
+
     
     
     public void saveAsExcel(DefaultTableModel model) {
@@ -70,7 +82,6 @@ public class reportController {
 
                 System.out.println("Excel file saved successfully.");
             } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
@@ -163,20 +174,12 @@ public class reportController {
         // Notify the view to update the table
         view.updateTable();
     } catch (Exception e) {
-        e.printStackTrace();
         // Handle the exception accordingly
+        
     }
 }
     
-    private Connection conn;
-     
-     public reportController(){
-         conn= MyConnection.dbConnect();
-     }
-    PreparedStatement pst;
-    ResultSet rs;
-    
-    report view;
+  
     
      public List<reportModel> getReportData(String selectedButton) {
     List<reportModel> reportList = new ArrayList<>();
@@ -239,9 +242,41 @@ public class reportController {
 
     return reportList;
 }
-
+public List<reportModel> getCustomData(Date from, Date to) {
+    List<reportModel> reportList = new ArrayList<>();
     
+    try {
+        String query = "SELECT * FROM TRANSACTION WHERE DATE BETWEEN ? AND ?";
+        pst = conn.prepareStatement(query);
+        pst.setDate(1, from);
+        pst.setDate(2,to);
+        rs = pst.executeQuery();
+        
+        while (rs.next()) {
+            String date = rs.getString("DATE");
+            String passengerNo = rs.getString("PASSENGER_NO");
+            String noOfTickets = rs.getString("NO_OF_TICKETS");
+            String seatClass = rs.getString("CLASS");
+            String price = rs.getString("PRICE");
 
-    
+            System.out.println("Date: " + date);
+            System.out.println("Passenger Number: " + passengerNo);
+            System.out.println("No. of Tickets: " + noOfTickets);
+            System.out.println("Class: " + seatClass);
+            System.out.println("Price: " + price);
+            System.out.println("-----------------------------------");
+
+            reportModel report = new reportModel(date, passengerNo, noOfTickets, seatClass, price);
+            reportList.add(report);
+        }
+
+        conn.close();
+    } catch (SQLException e) {
+        // Handle the exception accordingly
+        
+    }
+
+    return reportList;
+}
     
 }
