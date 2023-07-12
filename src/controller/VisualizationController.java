@@ -1,11 +1,7 @@
+
 package controller;
 
 import java.awt.GridLayout;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -21,69 +17,38 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import view.visualization;
 import database.*;
+import dao.VisualizationDAO;
+import java.awt.Toolkit;
+import java.sql.SQLException;
+
 public class VisualizationController {
     private VisualizationModel model;
     private visualization view;
-    private Connection conn;
+    private VisualizationDAO dao;
 
     public VisualizationController(VisualizationModel model, visualization view) {
         this.model = model;
         this.view = view;
+        dao = new VisualizationDAO();
     }
 
     public void generateCharts() {
-        
-        // Database connection details
-        String url = "jdbc:mysql://localhost:3306/trackhub";
-        String username = "root";
-        String password = "ENTERT@1nment";
-            //conn= MyConnection.dbConnect();
-
-        // Fetch data from the database
-        String query = "SELECT date, price, class FROM transaction";
-        try (Connection conn = DriverManager.getConnection(url, username, password);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-
-            // Map to store monthly sales data for each class
-            Map<String, Map<String, Integer>> classSalesMap = new HashMap<>();
-            // Map to store overall monthly sales
-            Map<String, Integer> overallSalesMap = new HashMap<>();
-
-            while (rs.next()) {
-                String date = rs.getString("date");
-                int price = rs.getInt("price");
-                String salesClass = rs.getString("class");
-
-                // Calculate the month from the date
-                LocalDate localDate = LocalDate.parse(date);
-                String month = localDate.format(DateTimeFormatter.ofPattern("MMM yyyy"));
-
-                // Update the class sales map
-                Map<String, Integer> monthlySalesMap = classSalesMap.getOrDefault(salesClass, new HashMap<>());
-                int currentMonthlySales = monthlySalesMap.getOrDefault(month, 0);
-                currentMonthlySales += price;
-                monthlySalesMap.put(month, currentMonthlySales);
-                classSalesMap.put(salesClass, monthlySalesMap);
-
-                // Update the overall sales map
-                int currentOverallSales = overallSalesMap.getOrDefault(month, 0);
-                currentOverallSales += price;
-                overallSalesMap.put(month, currentOverallSales);
-
-            }
+        try {
+            // Fetch data from the database
+            Map<String, Map<String, Integer>> classSalesMap = dao.getClassSalesData();
+            Map<String, Integer> overallSalesMap = dao.getOverallSalesData();
 
             // Create a JPanel to hold the charts
             JPanel chartPanel = new JPanel(new GridLayout(1, 3));
 
-            // Pie chart - Monthly sales for each clas
+            // Pie chart - Monthly sales for each class
             DefaultPieDataset pieDataset = new DefaultPieDataset();
             for (Map.Entry<String, Map<String, Integer>> entry : classSalesMap.entrySet()) {
                 String salesClass = entry.getKey();
                 Map<String, Integer> monthlySalesMap = entry.getValue();
 
                 for (Map.Entry<String, Integer> monthlyEntry : monthlySalesMap.entrySet()) {
-                             String month = monthlyEntry.getKey();
+                    String month = monthlyEntry.getKey();
                     int monthlySales = monthlyEntry.getValue();
 
                     // Create a unique key for the pie chart using the class and month
@@ -126,32 +91,16 @@ public class VisualizationController {
             ChartPanel lineChartPanel = new ChartPanel(lineChart);
             chartPanel.add(lineChartPanel);
 
-            // Add the chart panel to the JFrame
-           // getContentPane().add(chartPanel);
-            
             // Create a JFrame to display the panel
-            JFrame frame = new JFrame("Visualization of report");
+            JFrame frame = new JFrame("Trackhub: Visualization in Charts");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.getContentPane().add(chartPanel);
-            frame.setSize(1920,1080);
+            frame.setSize(1920, 1080);
             frame.setVisible(true);
+                    frame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/thulologo.png")));
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 }
-    
-
-    // Other controller methods can be added as needed
-
-//    public static void main(String[] args) {
-//        VisualizationModel model = new VisualizationModel();
-//        visualization view = new visualization();
-//        VisualizationController controller = new VisualizationController(model, view);
-//
-//        // Set up any necessary listeners or event handlers
-//
-//        view.setVisible(true);
-//        controller.generateCharts();
-//    }
-//}
