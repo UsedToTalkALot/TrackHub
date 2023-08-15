@@ -1,37 +1,32 @@
+
 package controller;
 
-import model.*;
-import view.*;
-import database.MyConnection;
+import view.login;
+import view.dashboard;
 import javax.swing.JOptionPane;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.ResultSet;
+import dao.loginDAO;
 
 public class loginController {
-    public void loginUser(String username, String password,login loginform) {
+    private loginDAO dao;
+
+    public loginController() {
+        dao = new loginDAO();
+    }
+
+    public void loginUser(String username, String password, login loginForm) {
         if ("USERNAME".equals(username)) {
             JOptionPane.showMessageDialog(null, "ENTER THE USERNAME");
         } else {
             try {
-                Connection conn = MyConnection.dbConnect();
-                Statement stmt = conn.createStatement();
-                String sql = "SELECT * FROM register WHERE USERNAME='" + username + "'";
-                ResultSet rs = stmt.executeQuery(sql);
+                String storedPassword = dao.getPasswordByUsername(username);
 
-                if (rs.next()) {
-                    String storedPassword = rs.getString("password");
+                if (storedPassword != null) {
                     if (password.equals(storedPassword)) {
                         // Login successful
-                        //JOptionPane.showMessageDialog(null, "Login successful");
-                        // Add your code for the actions to perform after successful login
-                        // Open the dashboard view
                         new login().setVisible(false);
-                       
                         dashboard dashboardView = new dashboard();
                         dashboardView.setVisible(true);
-                        loginform.dispose();
-                        
+                        loginForm.dispose();
                     } else {
                         // Incorrect password
                         JOptionPane.showMessageDialog(null, "Incorrect password");
